@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+ <head> 
+  <meta charset="UTF-8"> 
+  <title>新年快乐</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"> 
+  <meta name="mobile-web-app-capable" content="yes"> 
+  <meta name="apple-mobile-web-app-capable" content="yes"> 
+  <meta name="theme-color" content="#000000"> 
+  <link rel="shortcut icon" type="image/png" href="css/firework-burst-icon-v2.png"> 
+  <link rel="icon" type="image/png" href="css/firework-burst-icon-v2.png"> 
+  <link rel="apple-touch-icon-precomposed" href="css/firework-burst-icon-v2.png"> 
+  <meta name="msapplication-TileColor" content="#000000"> 
+  <meta name="msapplication-TileImage" content="https://s3-us-west-2.amazonaws.com/s.cdpn.io/329180/firework-burst-icon-v2.png"> 
+  <link rel="stylesheet" href="css/style.css"> 
+  <style>
+        .canvas-container {
+            background-image: url("images/dbc93e900363616abd385c8ebb1328ec.jpg");
+            background-size: cover;
+            background-position: center;
+        }
+    </style> 
+  <script src="js/jquery.min.js" type="text/javascript"></script> 
+  <script>
+        var shouci = true;
+        console.log(shouci);
+        function bodyPlayMusic() {
+            if (shouci) {
+                shouci = false;
+                audio.play();
+                console.log(shouci);
+            }
+        };
+
+    </script> 
+ </head> 
+ <body> 
+  <audio id="audioDom" src="https://sf6-cdn-tos.douyinstatic.com/obj/ies-music/7170534431801838367.mp3" preload="auto" loop="loop"></audio> 
+  <div id="yhBtn" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:999;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff ; font-size:15px"> 
+   <p>💥点爆</p> 
+  </div> 
+  <!-- App --> 
+  <div class="container"> 
+   <div class="loading-init"> 
+    <div class="loading-init__header"></div> 
+    <div class="loading-init__status"></div> 
+   </div> 
+   <div class="stage-container remove"> 
+    <div class="page_two hide"> 
+     <div class="type_words" id="contents"></div> 
+    </div> 
+    <div class="canvas-container"> 
+     <canvas id="trails-canvas"></canvas> 
+     <canvas id="main-canvas"></canvas> 
+     <canvas id="snow-canvas" style="opacity: 0.5;"></canvas> 
+     <div id="wish_text"></div> 
+    </div> 
+   </div> 
+  </div> 
+  <!-- partial --> 
+  <script type="text/javascript" src="js/common.js"></script> 
+  <script type="text/javascript" src="js/script.js"></script> 
+  <script type="text/javascript">
+        function musicPlay(isPlay) {
+            var media = document.querySelector('#audioDom');
+            if (isPlay && media.paused) {
+                media.play();
+            }
+            if (!isPlay && !media.paused) {
+                media.pause();
+            }
+        }
+        function musicInBrowserHandler() {
+            setTimeout(function () {
+                musicPlay(true)
+            }, 0)
+        }
+        document.body.addEventListener('touchstart', musicInBrowserHandler);
+        document.body.addEventListener('click', musicInBrowserHandler);
+
+        $('#yhBtn').click(e => {
+            $('#yhBtn').hide()
+            setTimeout(() => {
+                start()
+                fireworks();
+            }, 3800) // 这里的5000 是5s指烟花延时时间
+            setTimeout(() => {
+                function audioAutoPlay() {
+                    var audio = document.getElementById('audioDom');
+                    audio.play();
+                }
+                audioAutoPlay();
+                wishFun(); // 想要展示祝福语--取消注释
+            }, 2000) // 这里的5000 是5s指音乐延时时间
+            console.log(updateConfig({ autoLaunch: true }));
+        })
+        function fireworks() {
+            $('.page_two').removeClass('hide');
+        }
+        function wishFun() {
+            const wish = [
+                "2024到了",
+                "星源部落祝大家",
+                '新年快乐',
+                "Happy New Year",
+                "万事如意！"
+            ];
+            const text = document.getElementById('wish_text');
+            text.style.height = '120px';
+            if (text.classList.contains('wish_text')) {
+                text.classList.remove("wish_text");
+            }
+            let i = -1;
+            var timer = null;
+            clearInterval(timer);
+            //开始定时器
+            timer = setInterval(() => {
+                if (Math.random() * 100 > 2) {
+                    if (i < wish.length - 1) {
+                        i += 1;
+                    } else {
+                        i = 0; 
+                    }
+                    text.innerText = wish[i];
+                    text.style.animation = 'wish 4s infinite';
+                }
+            }, 4000);
+        }
+        function start() {
+            var text = [
+                'ʸᵒᵘ ᵃʳᵉ ᵗʰᵉ ᵒⁿˡʸ ᵇᵉˢᵗ ᶠᵒʳ ᵐᵉ.',
+                "与于我们成长而言，你们是至关重要且不可替代的重要角色❤️",
+                "大家新年快乐!"
+            ]
+            var str = text.join('<br><br>')
+            var str_ = ''
+            var i = 0
+            var content = document.getElementById('contents')
+            var timer = setInterval(() => {
+                if (str_.length < str.length) {
+                    str_ += str[i++]
+                    content.innerHTML = '<p>' + str_ + '<span class="xx" style="opacity: 1;color: red;">❤</span></p>'                        //打印时加光标
+                } else {
+                    clearInterval(timer)
+                    content.innerHTML = '<p>' + str_ + '</p>'
+                }
+            }, 100)
+        }
+    </script> 
+  <script type="text/javascript" src="js/other.js"></script> 
+  <script type="text/javascript" src="js/snow.js"></script>  
+ </body>
+</html>
